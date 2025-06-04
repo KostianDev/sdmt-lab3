@@ -1,0 +1,21 @@
+# ─ файли, які не потрібні в образі
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+# віртуальні оточення
+.venv/
+.env/
+# тестові та службові
+.wheelhouse/
+tests/
+.docs/
+*.md
+*.rst
+.git/
+.gitignore
+# IDE-артефакти
+.vscode/
+
+bench.tsv
