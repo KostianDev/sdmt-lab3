@@ -5,6 +5,10 @@ from starlette.responses import FileResponse
 from spaceship.config import Settings
 from spaceship.routers import api, health
 
+# Create the FastAPI application instance with the provided settings.
+# This function initializes the app with the necessary configurations,
+# mounts static files if in debug mode, and includes the API and health check routers.
+# It also defines a root endpoint that serves the main HTML file for the application.
 def make_app(settings: Settings) -> FastAPI:
     app = FastAPI(
         debug=settings.debug,
