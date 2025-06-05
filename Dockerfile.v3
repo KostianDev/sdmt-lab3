@@ -1,0 +1,20 @@
+FROM python:3.13.3-alpine AS builder
+WORKDIR /app
+RUN apk add --no-cache build-base
+COPY requirements/requirements.txt /requirements/requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip wheel --no-deps --wheel-dir /app/wheelhouse \
+              -r /requirements/requirements.txt --no-cache-dir
+
+FROM python:3.13.3-alpine
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1
+
+RUN --mount=type=bind,from=builder,source=/app/wheelhouse,target=/wh,ro \
+    --mount=type=bind,from=builder,source=/requirements,target=/requirements,ro \
+    pip install --no-index --no-cache-dir --find-links=/wh \
+        -r /requirements/requirements.txt
+
+COPY . .
+EXPOSE 8080
+CMD ["uvicorn", "spaceship.main:app", "--host", "0.0.0.0", "--port", "8080"]
